@@ -26,4 +26,11 @@ sequenceDiagram
     deactivate server
 
     Note right of browser: The browser executes the callback function that renders the notes
+
+    browser->>server: "Save" button clicked - POST https://studies.cs.helsinki.fi/exampleapp/new_note
+    activate server
+    server->>browser: Status Code 302, redirect to https://studies.cs.helsinki.fi/exampleapp/notes
+    deactivate server
+
+    browser->>browser: Reload page
 ```
