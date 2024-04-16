@@ -14,10 +14,23 @@ const App = () => {
   ]
    
   const [selected, setSelected] = useState(0)
+  const [votes, setVotes] = useState(Array(anecdotes.length).fill(0))
+
   const handleClick = () => {
-    let rand = Math.floor(Math.random() * 8)
+    const rand = Math.floor(Math.random() * 8)
+
     console.log(rand)
     setSelected(rand);
+  }
+
+  const handleVoteClick = () => {
+    const copy = [...votes]
+    console.log('before increment', copy[selected])
+
+    copy[selected] += 1
+    console.log('after increment', copy[selected] )
+    console.log(copy)
+    setVotes(copy);
   }
 
   return (
@@ -25,6 +38,9 @@ const App = () => {
     <div>
       {anecdotes[selected]}
       <br />
+      has {votes[selected]} votes
+      <br />
+      <button onClick={handleVoteClick}>vote</button>
       <button onClick={handleClick}>next anecdote</button>
     </div>
   )
