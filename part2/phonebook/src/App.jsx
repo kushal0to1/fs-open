@@ -18,7 +18,8 @@ const PersonForm = ({persons, newName, setPersons, setNewName, setNumber, number
     if (persons.some(person => person.name === newName)) {
       alert(`${newName} is already added to the phonebook`);
     } else {
-      setPersons([...persons, { name: newName, number: number, id: persons.reduce((max, obj) => obj['id'] > max ? obj['id'] : max, persons[0]['id']) + 1 }]);
+      const response = axios.post('http://localhost:3001/persons', { name: newName, number: number })
+      .then(response => setPersons(persons.concat(response.data)))
     }
     setNewName('');
     setNumber('');
@@ -54,12 +55,16 @@ const App = () => {
   const [number, setNumber] = useState('');
   const [search, setSearch] = useState('');
 
-  useEffect(() => {
-    axios.get('http://localhost:3000/persons')
+  const getPersons = () => {
+    axios.get('http://localhost:3001/persons')
       .then(response => {
         console.log('promise fulfilled')
         setPersons(response.data)
-  })}, [])
+  })}
+
+  useEffect(() => {
+    getPersons();
+  }, [])
 
   const handleSearch = (e) => {
     setSearch(e.target.value);
