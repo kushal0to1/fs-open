@@ -2,6 +2,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import contactsService from './services/contacts';
 
 const Filter = ({search, handleSearch}) => {
   return (
@@ -18,8 +19,8 @@ const PersonForm = ({persons, newName, setPersons, setNewName, setNumber, number
     if (persons.some(person => person.name === newName)) {
       alert(`${newName} is already added to the phonebook`);
     } else {
-      const response = axios.post('http://localhost:3001/persons', { name: newName, number: number })
-      .then(response => setPersons(persons.concat(response.data)))
+      contactsService.addPerson( newName, number)
+      .then(response => setPersons(persons.concat(response)))
     }
     setNewName('');
     setNumber('');
@@ -56,11 +57,9 @@ const App = () => {
   const [search, setSearch] = useState('');
 
   const getPersons = () => {
-    axios.get('http://localhost:3001/persons')
-      .then(response => {
-        console.log('promise fulfilled')
-        setPersons(response.data)
-  })}
+    contactsService.getAll()
+    .then(response => setPersons(response))  
+  }
 
   useEffect(() => {
     getPersons();
