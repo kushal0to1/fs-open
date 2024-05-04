@@ -29,8 +29,16 @@ const PersonForm = ({
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    if (persons.some((person) => person.name === newName)) {
-      alert(`${newName} is already added to the phonebook`);
+    const existingPerson = persons.find((person) => person.name === newName);
+    if (existingPerson) {
+      if (
+        window.confirm(
+          `${newName} is already added to the phonebook, replace the old number with a new one?`
+        )
+      ) {
+        contactsService.updatePerson(existingPerson.id, number, newName); 
+        window.location.reload();
+      }
     } else {
       contactsService
         .addPerson(newName, number)
